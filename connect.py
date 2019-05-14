@@ -1,18 +1,18 @@
 import math
 class ConnectFour:
+    #board = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
 
     def __init__(self):
         self.board = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
-
-    #Placing a Move on the board
+        #Placing a Move on the board
     def placeMove(self,column,player):
-        if self.board[0][column]!=0 :
-            return false
+        if self.board[0][column]!=0:
+            return False
         for i in range(5,0):
             if self.board[i][column] == 0:
                 self.board[i][column] = player
-                return true
-        return false
+                return True
+        return False
     
     
     def undoMove(self, column):
@@ -21,41 +21,26 @@ class ConnectFour:
                 self.board[i][column] = 0
                 break      
 
-    #//Printing the board
+    #Printing the board
     def displayConnectFour(self):
         for i in range(0,6):
             for j in range(0,7):
-                print(self.board[i][j]+" ")
+                print(str(self.board[i][j])+" ", end =" ")
+            print()
 
 
-class Connect4AI(): 
-    ConnectFour b =null
-    nextMoveLocation=-1
-    maxDepth = 9
+class Connect4AI:
     
+    #b=ConnectFour()
     def __init__(self, b):
-        self.b=b
-        #TODO
-        #self.scan=
-   
-   '''
-    Connect4AI(ConnectFour b){
-        this.b = b;
-        scan = new Scanner(System.in);
-    }
-    '''
-    
-    
-    
-    #Opponent's turn
+        self.b = b
+        self.nextMoveLocation=-1
+        self.maxDepth = 9
+
     def letOpponentMove(self):
-        println("Your move (1-7): ")
-        #TODO
-        #move = scan.nextInt();
-        while(move<1 || move > 7 || board[0][move-1]!=0):
+        move=int(input("Enter your move (1-7)"))
+        while(move<1 or move > 7 or self.b.board[0][move-1]!=0):
             print("Invalid move.\n\nYour move (1-7): ")
-            #TODO
-            #move = scan.nextInt()
         #Assume 2 is the opponent
         self.b.placeMove(move-1,2)
     
@@ -147,7 +132,7 @@ class Connect4AI():
         return 0
     
     
-    def calculateScore(aiScore,moreMoves):  
+    def calculateScore(self,aiScore,moreMoves):  
         moveScore = 4 - moreMoves
         if(aiScore==0):
             return 0
@@ -161,12 +146,13 @@ class Connect4AI():
             return 1000
     
     #Evaluate board favorableness for AI
-    def evaluateConnectFour(self,b):
+    def evaluateConnectFour(self):
       
         aiScore=1
         score=0
         blanks = 0
-        k=0, moreMoves=0
+        k=0
+        moreMoves=0
         for i in range(6,0):
             for j in range(0,7):
                 
@@ -210,7 +196,7 @@ class Connect4AI():
                                     break
                             
                     if(moreMoves!=0):
-                        score += calculateScore(aiScore, moreMoves)
+                        score += self.calculateScore(aiScore, moreMoves)
                     aiScore=1   
                     blanks = 0
 
@@ -234,7 +220,7 @@ class Connect4AI():
                                 break
                         
                     if(moreMoves!=0):
-                        score += calculateScore(aiScore, moreMoves)
+                        score += self.calculateScore(aiScore, moreMoves)
                     aiScore=1  
                     blanks = 0
 
@@ -255,14 +241,14 @@ class Connect4AI():
                         for c in range(0,4):
                             column = j- c
                             for m in range(i,6):
-                             if(self.b.board[m][column]==0):
-                                moreMoves=moreMoves+1
+                                if(self.b.board[m][column]==0):
+                                    moreMoves=moreMoves+1
                                 else:
                                     break
 
                     
                     if(moreMoves!=0):
-                        score += calculateScore(aiScore, moreMoves)
+                        score += self.calculateScore(aiScore, moreMoves)
                     aiScore=1 
                     blanks = 0
                  
@@ -281,16 +267,18 @@ class Connect4AI():
                     moreMoves=0
                     if(blanks>0):
                         for c in range(0,4):
-                            column = j+c, row = i-c
+                            column = j+c
+                            row = i-c
                             for m in range(row,6):
                                 if(self.b.board[m][column]==0):
                                     moreMoves=moreMoves+1
                                 elif(self.b.board[m][column]==1):
+                                    continue
                                 else:
                                     break
 
                         if(moreMoves!=0):
-                            score += calculateScore(aiScore, moreMoves)
+                            score += self.calculateScore(aiScore, moreMoves)
                         aiScore=1
                         blanks = 0
                     
@@ -310,16 +298,18 @@ class Connect4AI():
                     moreMoves=0
                     if(blanks>0):
                         for c in range(0,4):
-                            column = j-c, row = i-c
+                            column = j-c
+                            row = i-c
                             for m in range(row,6):
                                 if(self.b.board[m][column]==0):
                                     moreMoves=moreMoves+1
                                 elif(self.b.board[m][column]==1):
+                                    continue
                                 else:
                                     break
                         
                         if(moreMoves!=0):
-                            score += calculateScore(aiScore, moreMoves)
+                            score += self.calculateScore(aiScore, moreMoves)
                         aiScore=1
                         blanks = 0
         return score
@@ -333,34 +323,34 @@ class Connect4AI():
             else:
                 return -math.inf
 
-        gameResult = gameResult(self.b)
+        gameresult = self.gameResult(self.b)
         
-        if(gameResult==1):
+        if(gameresult==1):
             return math.inf/2
-        elif(gameResult==2):
+        elif(gameresult==2):
             return -math.inf/2
-        elif(gameResult==0):
+        elif(gameresult==0):
             return 0 
         
-        if(depth==maxDepth):
-            return evaluateConnectFour(self.b)
+        if(depth==self.maxDepth):
+            return self.evaluateConnectFour()
         
-        maxScore = Integer.MIN_VALUE
-        minScore = Integer.MAX_VALUE
+        maxScore = -math.inf
+        minScore = math.inf
                 
         for j in range(0,7):
             
             currentScore = 0
             
-            if(board[0][j]!=0):
+            if(self.b.board[0][j]!=0):
                 continue 
             
             if(turn==1):
                 self.b.placeMove(j, 1)
-                currentScore = minimax(depth+1, 2, alpha, beta)
+                currentScore = self.minimax(depth+1, 2, alpha, beta)
                 
                 if(depth==0):
-                    print("Score for location "+j+" = "+currentScore+"\n")
+                    print("Score for location "+str(j)+" = "+str(currentScore)+"\n")
                     if(currentScore > maxScore):
                         nextMoveLocation = j 
                     if(currentScore == math.inf/2):
@@ -372,7 +362,7 @@ class Connect4AI():
             
             elif(turn==2):
                 self.b.placeMove(j, 2)
-                currentScore = minimax(depth+1, 1, alpha, beta)
+                currentScore = self.minimax(depth+1, 1, alpha, beta)
                 minScore = min(currentScore, minScore)
                 beta = min(currentScore, beta) 
              
@@ -384,58 +374,56 @@ class Connect4AI():
         else:
             return minScore
     
-    def getAIMove():
-        nextMoveLocation = -1
-        minimax(0, 1, Integer.MIN_VALUE, Integer.MAX_VALUE)
-        return nextMoveLocation
+    def getAIMove(self):
+        self.nextMoveLocation = -1
+        self.minimax(0, 1, -math.inf, math.inf)
+        return self.nextMoveLocation
     
-    def playAgainstAIConsole():
+    def playAgainstAIConsole(self):
         humanMove=-1
         #TODO
         #Scanner scan = new Scanner(System.in)
-        print("Would you like to play first? (yes/no) "+"\n")
+        print("Would you like to play first? (yes/no) ")
         #TODO
-        #String answer = scan.next().trim()
+        answer=input()
         
-        if(answer.equalsIgnoreCase("yes")):
-            letOpponentMove()
-            self.b.displayConnectFour()
-            self.b.placeMove(3, 1)
-            self.b.displayConnectFour()
+        if(answer=="yes"):
+            #connect= Connect4AI()
+            self.letOpponentMove()
+        self.b.displayConnectFour()
+        self.b.placeMove(3, 1)
+        self.b.displayConnectFour()
         
-        while(true):
-            letOpponentMove()
+        while(1):
+            self.letOpponentMove()
             self.b.displayConnectFour()
-            gameResult = gameResult(self.b)
-            if(gameResult==1):
+            gameresult = self.gameResult(self.b)
+            if(gameresult==1):
                 print("AI Wins!\n")
                 break
-            elif(gameResult==2):
+            elif(gameresult==2):
                 print("You Win!\n")
                 break
-            elif(gameResult==0):
+            elif(gameresult==0):
                 print("Draw!\n")
                 break
             
-            self.b.placeMove(getAIMove(), 1)
+            self.b.placeMove(self.getAIMove(), 1)
             self.b.displayConnectFour()
-            gameResult = gameResult(self.b)
-            if(gameResult==1):
+            gameresult = self.gameResult(self.b)
+            if(gameresult==1):
                 print("AI Wins!\n")
-                    break
-            elif(gameResult==2):
+                break
+            elif(gameresult==2):
                 print("You Win!\n")
-                    break
-            elif(gameResult==0):
+                break
+            elif(gameresult==0):
                 print("Draw!\n")
-                    break
+                break
     
     def main():
         b = ConnectFour()
         ai = Connect4AI(b)  
         ai.playAgainstAIConsole()
 #TODO  
-if __name__ == '__main__':
-    main()
-
-
+Connect4AI.main()
