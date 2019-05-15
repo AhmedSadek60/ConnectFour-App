@@ -25,7 +25,12 @@ class ConnectFour:
     def displayConnectFour(self):
         for i in range(0,6):
             for j in range(0,7):
-                print(str(self.board[i][j])+" ", end =" ")
+            	if self.board[i][j]==1:
+            		print("x"+" ", end =" ")
+            	elif self.board[i][j]==2:
+            		print("o"+" ", end =" ")
+            	else:
+            		print("."+" ", end =" ")
             print()
         print()
 
@@ -39,9 +44,9 @@ class Connect4AI:
         self.maxDepth = 6
 
     def letOpponentMove(self):
-        move=int(input("Enter your move (1-7)"))
+        move=int(input("Enter your move (1-7): "))
         while(move<1 or move > 7 or self.b.board[0][move-1]!=0):
-            print("Invalid move.\n\nYour move (1-7): ")
+            print("Invalid move.\n\nPlay again (1-7): ")
         #Assume 2 is the opponent
         self.b.placeMove(move-1,2)
 
